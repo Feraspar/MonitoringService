@@ -5,22 +5,17 @@
 	/// <summary>
 	/// Сущность, которая хранит данные об активности устройства.
 	/// </summary>
-	public class DeviceActivityItem
+	public class DeviceActivity
 	{
 		#region Public Properties
 
 		/// <summary>
-		/// Время создания записи об активности.
+		/// Id записи об активности.
 		/// </summary>
-		public DateTimeOffset CreatedAt { get; set; }
+		public long Id { get; set; }
 
 		/// <summary>
-		/// Устройство, с которого ведется сессия.
-		/// </summary>
-		public DeviceItem Device { get; set; } = null!;
-
-		/// <summary>
-		/// Id Устройства.
+		/// Id устройства.
 		/// </summary>
 		public Guid DeviceId { get; set; }
 
@@ -30,24 +25,29 @@
 		public string DeviceName { get; set; } = string.Empty;
 
 		/// <summary>
-		/// Время конца активности.
-		/// </summary>
-		public DateTimeOffset EndTime { get; set; }
-
-		/// <summary>
-		/// Id записи об активности.
-		/// </summary>
-		public long Id { get; set; }
-
-		/// <summary>
 		/// Время начала активности.
 		/// </summary>
 		public DateTimeOffset StartTime { get; set; }
 
 		/// <summary>
+		/// Время конца активности.
+		/// </summary>
+		public DateTimeOffset EndTime { get; set; }
+
+		/// <summary>
 		/// Версия устройства.
 		/// </summary>
 		public string Version { get; set; } = string.Empty;
+
+		/// <summary>
+		/// Время создания записи об активности.
+		/// </summary>
+		public DateTimeOffset CreatedAt { get; set; }
+
+		/// <summary>
+		/// Устройство, с которого ведется сессия.
+		/// </summary>
+		public Device Device { get; set; } = null!;
 
 		#endregion Public Properties
 	}

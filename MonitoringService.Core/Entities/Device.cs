@@ -6,14 +6,9 @@
 	/// <summary>
 	/// Сущность, которая хранит данные об устройствах.
 	/// </summary>
-	public class DeviceItem
+	public class Device
 	{
 		#region Public Properties
-
-		/// <summary>
-		/// Список записей истории активности.
-		/// </summary>
-		public List<DeviceActivityItem> DeviceActivity { get; set; } = new();
 
 		/// <summary>
 		/// Id устройства.
@@ -34,6 +29,11 @@
 		/// Версия на момент последнего использования.
 		/// </summary>
 		public string LastVersion { get; set; } = string.Empty;
+
+		/// <summary>
+		/// Список записей истории активности.
+		/// </summary>
+		public List<DeviceActivity> DeviceActivity { get; set; } = new();
 
 		#endregion Public Properties
 	}
