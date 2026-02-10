@@ -3,17 +3,31 @@
 	using Microsoft.EntityFrameworkCore;
 	using MonitoringService.Core.Entities;
 
+	/// <summary>
+	/// Контекст для работы с базой данных.
+	/// </summary>
 	public class MonitoringServiceDbContext : DbContext
 	{
 		#region Public Properties
 
+		/// <summary>
+		/// Таблица активностей устройства.
+		/// </summary>
 		public DbSet<DeviceActivity> DeviceActivities => Set<DeviceActivity>();
+
+		/// <summary>
+		/// Таблица устройств.
+		/// </summary>
 		public DbSet<Device> Devices => Set<Device>();
 
 		#endregion Public Properties
 
 		#region Public Constructors
 
+		/// <summary>
+		/// Конструктор класса.
+		/// </summary>
+		/// <param name="options">Параметры конфигурации контекста базы данных.</param>
 		public MonitoringServiceDbContext(DbContextOptions<MonitoringServiceDbContext> options) : base(options)
 		{
 		}
@@ -22,6 +36,10 @@
 
 		#region Protected Methods
 
+		/// <summary>
+		/// Настроивает модель данных.
+		/// </summary>
+		/// <param name="modelBuilder">Конструктор схемы БД.</param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
