@@ -20,4 +20,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MonitoringService.Core\MonitoringService.Core.csproj" />
+    <ProjectReference Include="..\MonitoringService.Infrastructure\MonitoringService.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
