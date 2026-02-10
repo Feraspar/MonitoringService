@@ -18,7 +18,7 @@
 		/// <summary>
 		/// Последнее имя пользователя.
 		/// </summary>
-		public string LastName { get; set; } = string.Empty;
+		public string Name { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Последнее время активности.
@@ -33,7 +33,7 @@
 		/// <summary>
 		/// Список записей истории активности.
 		/// </summary>
-		public List<DeviceActivity> DeviceActivity { get; set; } = new();
+		public List<DeviceActivity> DeviceActivities { get; set; } = new();
 
 		#endregion Public Properties
 	}

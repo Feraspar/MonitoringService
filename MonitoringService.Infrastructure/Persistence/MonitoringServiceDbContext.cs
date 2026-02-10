@@ -14,7 +14,7 @@
 
 		#region Public Constructors
 
-		public MonitoringServiceDbContext(DbContextOptions options) : base(options)
+		public MonitoringServiceDbContext(DbContextOptions<MonitoringServiceDbContext> options) : base(options)
 		{
 		}
 
@@ -32,7 +32,7 @@
 
 				entity.HasKey(x => x.Id);
 
-				entity.Property(x => x.LastName).HasMaxLength(200).IsRequired();
+				entity.Property(x => x.Name).HasMaxLength(200).IsRequired();
 
 				entity.Property(x => x.LastSeenAt).IsRequired();
 				entity.HasIndex(x => x.LastSeenAt);
@@ -42,14 +42,14 @@
 
 			modelBuilder.Entity<DeviceActivity>(entity =>
 			{
-				entity.ToTable("device_activity");
+				entity.ToTable("device_activities");
 
 				entity.HasKey(x => x.Id);
 				entity.Property(x => x.Id).ValueGeneratedOnAdd();
 
 				entity.Property(x => x.DeviceId).IsRequired();
 
-				entity.Property(x => x.DeviceName).HasMaxLength(200).IsRequired();
+				entity.Property(x => x.DeviceUserName).HasMaxLength(200).IsRequired();
 
 				entity.Property(x => x.Version).HasMaxLength(50).IsRequired();
 
@@ -59,7 +59,7 @@
 
 				entity.Property(x => x.CreatedAt).IsRequired();
 
-				entity.HasOne(x => x.Device).WithMany(d => d.DeviceActivity).HasForeignKey(d => d.DeviceId).OnDelete(DeleteBehavior.Cascade);
+				entity.HasOne(x => x.Device).WithMany(d => d.DeviceActivities).HasForeignKey(x => x.DeviceId).OnDelete(DeleteBehavior.Cascade);
 
 				entity.HasIndex(x => new { x.DeviceId, x.StartTime });
 			});

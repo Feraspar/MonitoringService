@@ -22,7 +22,7 @@
 		/// <summary>
 		/// Имя пользователя.
 		/// </summary>
-		public string DeviceName { get; set; } = string.Empty;
+		public string DeviceUserName { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Время начала активности.
