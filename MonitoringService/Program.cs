@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using MonitoringService.Core.Abstractions;
 using MonitoringService.Infrastructure.Persistence;
+using MonitoringService.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ builder.Services.AddHealthChecks();
 
 var connectionString = builder.Configuration.GetConnectionString("MonitoringServiceDb");
 builder.Services.AddDbContext<MonitoringServiceDbContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 var app = builder.Build();
 
