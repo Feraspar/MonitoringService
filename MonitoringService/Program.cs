@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MonitoringService.Core.Abstractions;
+using MonitoringService.Core.Services;
 using MonitoringService.Infrastructure.Persistence;
 using MonitoringService.Infrastructure.Repositories;
 
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<MonitoringServiceDbContext>(options => options.Use
 
 builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IDeviceActivityService, DeviceActivityService>();
 
 var app = builder.Build();
 

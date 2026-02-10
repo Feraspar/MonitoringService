@@ -9,7 +9,7 @@
 	/// <param name="StartTime">Время начала сессии.</param>
 	/// <param name="EndTime">Время конца сессии.</param>
 	/// <param name="Version">Версия устройства.</param>
-	public sealed record DeviceActivityResponce(
+	public sealed record DeviceActivityResponse(
 		Guid DeviceId,
 		long ActivityId,
 		string DeviceUserName,
