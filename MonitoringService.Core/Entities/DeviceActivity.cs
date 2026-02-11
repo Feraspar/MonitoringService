@@ -35,7 +35,7 @@
 		public DateTimeOffset EndTime { get; set; }
 
 		/// <summary>
-		/// Версия устройства.
+		/// Версия приложения.
 		/// </summary>
 		public string Version { get; set; } = string.Empty;
 

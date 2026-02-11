@@ -1,7 +1,7 @@
 ﻿namespace MonitoringService.Api.Controllers
 {
 	using Microsoft.AspNetCore.Mvc;
-	using MonitoringService.Api.Contracts;
+	using MonitoringService.Core.Contracts;
 	using MonitoringService.Core.Abstractions;
 
 	[ApiController]

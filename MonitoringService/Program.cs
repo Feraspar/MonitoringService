@@ -21,6 +21,15 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IDeviceActivityService, DeviceActivityService>();
+builder.Services.AddScoped<IDeviceQueryService, DeviceQueryService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    policy.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+});
 
 var app = builder.Build();
 
@@ -31,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

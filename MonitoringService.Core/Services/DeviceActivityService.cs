@@ -1,6 +1,7 @@
 ﻿namespace MonitoringService.Core.Services
 {
 	using MonitoringService.Core.Abstractions;
+	using MonitoringService.Core.Contracts;
 	using MonitoringService.Core.Entities;
 	using System;
 	using System.Threading;
@@ -56,9 +57,9 @@
 		/// <param name="name">Имя пользователя.</param>
 		/// <param name="startTime">Время начала сессии.</param>
 		/// <param name="endTime">Время конца сессии.</param>
-		/// <param name="version">Версия устройства.</param>
+		/// <param name="version">Версия приложения.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
-		public async Task<DeviceActivityIngestResult> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string? version, CancellationToken ct = default)
+		public async Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string? version, CancellationToken ct = default)
 		{
 			if (deviceId == Guid.Empty)
 			{
@@ -117,7 +118,7 @@
 
 			await _unitOfWork.SaveChangesAsync(ct);
 
-			return new DeviceActivityIngestResult(device.Id, activity.Id, activity.DeviceUserName, activity.StartTime, activity.EndTime, activity.Version);
+			return new DeviceActivityResponse(device.Id, activity.Id, activity.DeviceUserName, activity.StartTime, activity.EndTime, activity.Version);
 		}
 
 		#endregion Public Methods

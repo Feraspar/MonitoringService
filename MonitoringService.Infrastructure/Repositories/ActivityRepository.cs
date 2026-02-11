@@ -55,10 +55,30 @@
 		/// <param name="deviceId">Id устройства.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
 		/// <returns>Список активностей устройства.</returns>
-		public async Task<List<DeviceActivity>> GetAllById(Guid deviceId, CancellationToken ct = default)
+		public async Task<List<DeviceActivity>> GetAllByIdAsync(Guid deviceId, CancellationToken ct = default)
 		{
 			var list = await _db.DeviceActivities.Where(x => x.DeviceId == deviceId).OrderByDescending(x => x.StartTime).ToListAsync(ct);
 			return list;
+		}
+
+		/// <summary>
+		/// Получает количество записей об активности устройства.
+		/// </summary>
+		/// <param name="deviceIds">Id устройств.</param>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
+		public async Task<Dictionary<Guid, int>> GetCountsByDeviceIdsAsync(IEnumerable<Guid> deviceIds, CancellationToken ct = default)
+		{
+			var ids = deviceIds.Distinct().ToArray();
+			if(ids.Length == 0)
+				return new Dictionary<Guid, int>();
+
+			var dict = await _db.DeviceActivities
+				.Where(a => ids.Contains(a.DeviceId))
+				.GroupBy(a => a.DeviceId)
+				.Select(x => new {DeviceId = x.Key, Count = x.Count()})
+				.ToDictionaryAsync(x =>  x.DeviceId, x => x.Count, ct);
+
+			return dict;
 		}
 
 		#endregion Public Methods
