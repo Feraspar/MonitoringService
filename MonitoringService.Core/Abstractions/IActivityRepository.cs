@@ -25,7 +25,9 @@
 		/// <param name="deviceId">Id устройства.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
 		/// <returns>Список активностей устройства.</returns>
-		Task<List<DeviceActivity>> GetAllById(Guid deviceId, CancellationToken ct = default);
+		Task<List<DeviceActivity>> GetAllByIdAsync(Guid deviceId, CancellationToken ct = default);
+
+		Task<Dictionary<Guid, int>> GetCountsByDeviceIdsAsync(IEnumerable<Guid> deviceIds,  CancellationToken ct = default);
 
 		#endregion Public Methods
 	}
