@@ -58,7 +58,7 @@
 		/// <param name="endTime">Время конца сессии.</param>
 		/// <param name="version">Версия устройства.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
-		public async Task<DeviceActivityIngestResult> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default)
+		public async Task<DeviceActivityIngestResult> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string? version, CancellationToken ct = default)
 		{
 			if (deviceId == Guid.Empty)
 			{
