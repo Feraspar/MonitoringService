@@ -61,6 +61,11 @@
 			return list;
 		}
 
+		/// <summary>
+		/// Получает количество записей об активности устройства.
+		/// </summary>
+		/// <param name="deviceIds">Id устройств.</param>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
 		public async Task<Dictionary<Guid, int>> GetCountsByDeviceIdsAsync(IEnumerable<Guid> deviceIds, CancellationToken ct = default)
 		{
 			var ids = deviceIds.Distinct().ToArray();

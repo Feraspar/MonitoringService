@@ -8,8 +8,13 @@
 	using System.Threading;
 	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Сервис для получения устройств из БД.
+	/// </summary>
 	public class DeviceQueryService : IDeviceQueryService
 	{
+		#region Private Fields
+
 		/// <summary>
 		/// Репозитрий активностей устройства.
 		/// </summary>
@@ -20,12 +25,31 @@
 		/// </summary>
 		private readonly IDeviceRepository _deviceRepository;
 
+		#endregion Private Fields
+
+		#region Public Constructors
+
+		/// <summary>
+		/// Конструктор класса.
+		/// </summary>
+		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
+		/// <param name="deviceRepository">Репозиторий устройств.</param>
 		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository)
 		{
 			_activityRepository = activityRepository;
 			_deviceRepository = deviceRepository;
 		}
 
+		#endregion Public Constructors
+
+		#region Public Methods
+
+		/// <summary>
+		/// Запрашивает все записи об устройстве.
+		/// </summary>
+		/// <param name="deviceId">Id устройства.</param>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
+		/// <returns>Список записей об устройстве.</returns>
 		public async Task<List<DeviceActivityItemResponse>> GetAllActivitiesByIdAsync(Guid deviceId, CancellationToken ct = default)
 		{
 			var activities = await _activityRepository.GetAllByIdAsync(deviceId, ct);
@@ -41,6 +65,11 @@
 			return response;
 		}
 
+		/// <summary>
+		/// Запрашивает все устройства.
+		/// </summary>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
+		/// <returns>Список устройств.</returns>
 		public async Task<List<DeviceListItemResponse>> GetAllDevicesAsync(CancellationToken ct = default)
 		{
 			var devices = await _deviceRepository.GetAllAsync(ct);
@@ -65,5 +94,7 @@
 
 			return response;
 		}
+
+		#endregion Public Methods
 	}
 }

@@ -27,6 +27,11 @@
 		/// <returns>Список активностей устройства.</returns>
 		Task<List<DeviceActivity>> GetAllByIdAsync(Guid deviceId, CancellationToken ct = default);
 
+		/// <summary>
+		/// Получает количество записей об активности устройства.
+		/// </summary>
+		/// <param name="deviceIds">Id устройств.</param>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
 		Task<Dictionary<Guid, int>> GetCountsByDeviceIdsAsync(IEnumerable<Guid> deviceIds,  CancellationToken ct = default);
 
 		#endregion Public Methods

@@ -1,5 +1,6 @@
 ﻿namespace MonitoringService.Core.Abstractions
 {
+	using MonitoringService.Core.Contracts;
 	using System;
 	using System.Threading.Tasks;
 
@@ -17,9 +18,9 @@
 		/// <param name="name">Имя пользователя.</param>
 		/// <param name="startTime">Время начала сессии.</param>
 		/// <param name="endTime">Время конца сессии.</param>
-		/// <param name="version">Версия устройства.</param>
+		/// <param name="version">Версия приложения.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
-		Task<DeviceActivityIngestResult> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default);
+		Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default);
 
 		#endregion Public Methods
 	}

@@ -9,7 +9,7 @@
 	/// <param name="Name">Имя пользователя.</param>
 	/// <param name="StartTime">Время начала сессии.</param>
 	/// <param name="EndTime">Время конца сессии.</param>
-	/// <param name="Version">Версия устройства.</param>
+	/// <param name="Version">Версия приложения.</param>
 	public sealed record DeviceActivityRequest(
 		[property: JsonPropertyName("_id")] Guid DeviceId,
 		[property: JsonPropertyName("name")] string? Name,
