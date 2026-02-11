@@ -37,7 +37,7 @@
 		#region Protected Methods
 
 		/// <summary>
-		/// Настроивает модель данных.
+		/// Настраивает модель данных.
 		/// </summary>
 		/// <param name="modelBuilder">Конструктор схемы БД.</param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@
 
 				entity.HasKey(x => x.Id);
 
-				entity.Property(x => x.Name).HasMaxLength(200).IsRequired();
+				entity.Property(x => x.Name).HasMaxLength(256).IsRequired();
 
 				entity.Property(x => x.LastSeenAt).IsRequired();
 				entity.HasIndex(x => x.LastSeenAt);
@@ -67,7 +67,7 @@
 
 				entity.Property(x => x.DeviceId).IsRequired();
 
-				entity.Property(x => x.DeviceUserName).HasMaxLength(200).IsRequired();
+				entity.Property(x => x.DeviceUserName).HasMaxLength(256).IsRequired();
 
 				entity.Property(x => x.Version).HasMaxLength(50).IsRequired();
 
