@@ -1,8 +1,9 @@
 ﻿namespace MonitoringService.Api.Controllers
 {
 	using Microsoft.AspNetCore.Mvc;
-	using MonitoringService.Core.Contracts;
 	using MonitoringService.Core.Abstractions;
+	using MonitoringService.Core.Contracts;
+	using MonitoringService.Core.Validation;
 
 	[ApiController]
 	[Route("api/[controller]")]
@@ -45,6 +46,12 @@
 				_logger.LogInformation("POST device={DeviceId} successfull", result.DeviceId);
 
 				return Ok(response);
+			}
+			catch (DomainValidationException ex)
+			{
+				_logger.LogWarning("Validation error. Errors count={Count}", ex.Errors.Count());
+
+				return BadRequest(new ValidationErrorResponse(ex.Errors));
 			}
 			catch (ArgumentException ex)
 			{
