@@ -36,6 +36,7 @@
 		/// Конструктор класса.
 		/// </summary>
 		/// <param name="db">Контекст БД.</param>
+		/// <param name="logger">Логгер для вывода информации.</param>
 		public ActivityRepository(MonitoringServiceDbContext db, ILogger<ActivityRepository> logger)
 		{
 			_db = db;

@@ -40,6 +40,7 @@
 		/// </summary>
 		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
 		/// <param name="deviceRepository">Репозиторий устройств.</param>
+		/// <param name="logger">Логгер для вывода информации.</param>
 		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository, ILogger<DeviceQueryService> logger)
 		{
 			_activityRepository = activityRepository;

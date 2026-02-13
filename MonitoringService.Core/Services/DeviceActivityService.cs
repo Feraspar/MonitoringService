@@ -46,6 +46,7 @@
 		/// <param name="deviceRepository">Репозиторий устройств.</param>
 		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
 		/// <param name="unitOfWork">Сервис сохранения изменений в БД.</param>
+		/// <param name="logger">Логгер для вывода информации.</param>
 		public DeviceActivityService(IDeviceRepository deviceRepository, IActivityRepository activityRepository, IUnitOfWork unitOfWork, ILogger<DeviceActivityService> logger)
 		{
 			_deviceRepository = deviceRepository;

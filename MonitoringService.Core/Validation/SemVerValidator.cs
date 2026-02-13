@@ -22,7 +22,6 @@
 		/// Проверяет относится ли строка к формату SemVer.
 		/// </summary>
 		/// <param name="version"></param>
-		/// <returns></returns>
 		public static bool IsValid(string? version)
 		{
 			if (string.IsNullOrWhiteSpace(version))
