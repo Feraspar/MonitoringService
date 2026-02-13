@@ -20,7 +20,7 @@
 		/// <param name="endTime">Время конца сессии.</param>
 		/// <param name="version">Версия приложения.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
-		Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default);
+		Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default);
 
 		#endregion Public Methods
 	}

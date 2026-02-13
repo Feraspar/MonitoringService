@@ -4,6 +4,7 @@
 	using MonitoringService.Core.Abstractions;
 	using MonitoringService.Core.Contracts;
 	using MonitoringService.Core.Entities;
+	using MonitoringService.Core.Validation;
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -26,14 +27,14 @@
 		private readonly IDeviceRepository _deviceRepository;
 
 		/// <summary>
-		/// Сервис сохранения изменений в БД.
-		/// </summary>
-		private readonly IUnitOfWork _unitOfWork;
-
-		/// <summary>
 		/// Логгер для вывода информации.
 		/// </summary>
 		private readonly ILogger<DeviceActivityService> _logger;
+
+		/// <summary>
+		/// Сервис сохранения изменений в БД.
+		/// </summary>
+		private readonly IUnitOfWork _unitOfWork;
 
 		#endregion Private Fields
 
@@ -66,24 +67,17 @@
 		/// <param name="endTime">Время конца сессии.</param>
 		/// <param name="version">Версия приложения.</param>
 		/// <param name="ct">Токен для отмены выполняемой операции.</param>
-		public async Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string? name, DateTimeOffset startTime, DateTimeOffset endTime, string? version, CancellationToken ct = default)
+		public async Task<DeviceActivityResponse> IngestDataAsync(Guid deviceId, string name, DateTimeOffset startTime, DateTimeOffset endTime, string version, CancellationToken ct = default)
 		{
-			if (deviceId == Guid.Empty)
+			var errors = Validate(deviceId, name, startTime, endTime, version);
+			if (errors.Count > 0)
 			{
-				_logger.LogWarning("Ingest validation failed: deviceId is empty");
-				throw new ArgumentNullException("deviceId is required", nameof(deviceId));
-			}
+				_logger.LogWarning("Ingest validation failed for deviceId={DeviceId}. ErrorsCount={ErrorsCount}", deviceId, errors.Count);
 
-			if (endTime < startTime)
-			{
-				_logger.LogWarning("Ingest validation failed: endTime < startTime. deviceId={DeviceId}, startTime={StartTime}, endTime={EndTime}", deviceId, startTime, endTime);
-				throw new ArgumentNullException("endTime must be >= startTime", nameof(endTime));
+				throw new DomainValidationException(errors);
 			}
 
 			var now = DateTimeOffset.UtcNow;
-
-			var incomingName = string.IsNullOrWhiteSpace(name) ? null : name.Trim();
-			var incomingVersion = string.IsNullOrWhiteSpace(version) ? null : version.Trim();
 
 			var device = await _deviceRepository.GetByIdAsync(deviceId, ct);
 
@@ -94,9 +88,9 @@
 				device = new Device
 				{
 					Id = deviceId,
-					Name = incomingName ?? string.Empty,
+					Name = name,
 					LastSeenAt = now,
-					LastVersion = incomingVersion ?? string.Empty
+					LastVersion = version
 				};
 
 				await _deviceRepository.AddAsync(device, ct);
@@ -105,25 +99,18 @@
 			{
 				_logger.LogDebug("Device found. Updating snapshot fields: deviceId={DeviceId}", deviceId);
 
-				if (incomingName is not null)
-					device.Name = incomingName;
-
-				if (incomingVersion is not null)
-					device.LastVersion = incomingVersion;
-
+				device.Name = name;
+				device.LastVersion = version;
 				device.LastSeenAt = now;
 			}
-
-			var snapshotName = incomingName ?? device.Name;
-			var snapshotVersion = incomingVersion ?? device.LastVersion;
 
 			var activity = new DeviceActivity
 			{
 				DeviceId = deviceId,
-				DeviceUserName = snapshotName ?? string.Empty,
+				DeviceUserName = name,
 				StartTime = startTime,
 				EndTime = endTime,
-				Version = snapshotVersion ?? string.Empty,
+				Version = version,
 				CreatedAt = now
 			};
 
@@ -137,5 +124,43 @@
 		}
 
 		#endregion Public Methods
+
+		#region Private Methods
+
+		/// <summary>
+		/// Проверяет введенные данные на валидность.
+		/// </summary>
+		/// <param name="deviceId">Id устройства.</param>
+		/// <param name="name">Имя пользователя.</param>
+		/// <param name="startTime">Время начала сессии.</param>
+		/// <param name="endTime">Время конца сессии.</param>
+		/// <param name="version">Версия приложения.</param>
+		/// <returns>Список ошибок.</returns>
+		private List<ValidationError> Validate(Guid deviceId, string name, DateTimeOffset startTime, DateTimeOffset endTime, string version)
+		{
+			var errors = new List<ValidationError>();
+
+			if (deviceId == Guid.Empty)
+				errors.Add(new ValidationError(nameof(deviceId), "deviceId is required"));
+
+			if (string.IsNullOrWhiteSpace(name))
+				errors.Add(new ValidationError(nameof(name), "Name is required"));
+
+			if (name.Length > 256)
+				errors.Add(new ValidationError(nameof(name), "Name length must not exceed 256 characters"));
+
+			if (string.IsNullOrWhiteSpace(version))
+				errors.Add(new ValidationError(nameof(version), "Version is required"));
+
+			if (endTime <= startTime)
+				errors.Add(new ValidationError(nameof(endTime), "EndTime must be greater than StartTime"));
+
+			if (!SemVerValidator.IsValid(version))
+				errors.Add(new ValidationError(nameof(version), "Version must be in SemVer format"));
+
+			return errors;
+		}
+
+		#endregion Private Methods
 	}
 }

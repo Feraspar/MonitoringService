@@ -1,5 +1,6 @@
 ﻿namespace MonitoringService.Core.Contracts
 {
+	using System.ComponentModel.DataAnnotations;
 	using System.Text.Json.Serialization;
 
 	/// <summary>
@@ -11,10 +12,19 @@
 	/// <param name="EndTime">Время конца сессии.</param>
 	/// <param name="Version">Версия приложения.</param>
 	public sealed record DeviceActivityRequest(
-		[property: JsonPropertyName("_id")] Guid DeviceId,
-		[property: JsonPropertyName("name")] string? Name,
-		[property: JsonPropertyName("startTime")] DateTimeOffset StartTime,
-		[property: JsonPropertyName("endTime")] DateTimeOffset EndTime,
-		[property: JsonPropertyName("version")] string? Version
-		);
+		[property: JsonPropertyName("_id")] 
+		Guid DeviceId,
+
+		[property: JsonPropertyName("name")]
+		string Name,
+
+		[property: JsonPropertyName("startTime")] 
+		DateTimeOffset StartTime,
+
+		[property: JsonPropertyName("endTime")] 
+		DateTimeOffset EndTime,
+
+		[property: JsonPropertyName("version")]
+		string Version
+	);
 }
