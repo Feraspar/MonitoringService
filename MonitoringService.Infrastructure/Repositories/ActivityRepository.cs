@@ -1,6 +1,7 @@
 ﻿namespace MonitoringService.Infrastructure.Repositories
 {
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Logging;
 	using MonitoringService.Core.Abstractions;
 	using MonitoringService.Core.Entities;
 	using MonitoringService.Infrastructure.Persistence;
@@ -22,6 +23,11 @@
 		/// </summary>
 		private readonly MonitoringServiceDbContext _db;
 
+		/// <summary>
+		/// Логгер для вывода информации.
+		/// </summary>
+		private readonly ILogger _logger;
+
 		#endregion Private Fields
 
 		#region Public Constructors
@@ -30,9 +36,10 @@
 		/// Конструктор класса.
 		/// </summary>
 		/// <param name="db">Контекст БД.</param>
-		public ActivityRepository(MonitoringServiceDbContext db)
+		public ActivityRepository(MonitoringServiceDbContext db, ILogger logger)
 		{
 			_db = db;
+			_logger = logger;
 		}
 
 		#endregion Public Constructors
@@ -58,6 +65,9 @@
 		public async Task<List<DeviceActivity>> GetAllByIdAsync(Guid deviceId, CancellationToken ct = default)
 		{
 			var list = await _db.DeviceActivities.Where(x => x.DeviceId == deviceId).OrderByDescending(x => x.StartTime).ToListAsync(ct);
+
+			_logger.LogDebug("DB query result: activities count={Count} for deviceId={DeviceId}", list.Count, deviceId);
+
 			return list;
 		}
 
@@ -77,6 +87,8 @@
 				.GroupBy(a => a.DeviceId)
 				.Select(x => new {DeviceId = x.Key, Count = x.Count()})
 				.ToDictionaryAsync(x =>  x.DeviceId, x => x.Count, ct);
+
+			_logger.LogDebug("DB query result: counts keysCount={KeysCount}", dict.Count);
 
 			return dict;
 		}

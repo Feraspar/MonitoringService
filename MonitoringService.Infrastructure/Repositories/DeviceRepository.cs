@@ -1,6 +1,7 @@
 ﻿namespace MonitoringService.Infrastructure.Repositories
 {
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Logging;
 	using MonitoringService.Core.Abstractions;
 	using MonitoringService.Core.Entities;
 	using MonitoringService.Infrastructure.Persistence;
@@ -22,6 +23,11 @@
 		/// </summary>
 		private readonly MonitoringServiceDbContext _db;
 
+		/// <summary>
+		/// Логгер для вывода информации.
+		/// </summary>
+		private readonly ILogger _logger;
+
 		#endregion Private Fields
 
 		#region Public Constructors
@@ -30,9 +36,10 @@
 		/// Конструктор класса.
 		/// </summary>
 		/// <param name="db">Контекст БД.</param>
-		public DeviceRepository(MonitoringServiceDbContext db)
+		public DeviceRepository(MonitoringServiceDbContext db, ILogger logger)
 		{
 			_db = db;
+			_logger = logger;
 		}
 
 		#endregion Public Constructors
@@ -57,6 +64,9 @@
 		public async Task<List<Device>> GetAllAsync(CancellationToken ct = default)
 		{
 			var list = await _db.Devices.OrderByDescending(x => x.LastSeenAt).ToListAsync(ct);
+
+			_logger.LogDebug("DB query result: devices count={Count}", list.Count);
+
 			return list;
 		}
 
@@ -69,6 +79,9 @@
 		public async Task<Device?> GetByIdAsync(Guid id, CancellationToken ct = default)
 		{
 			var device = await _db.Devices.FirstOrDefaultAsync(x => x.Id == id, ct);
+
+			_logger.LogDebug("DB query result: device is found by id={DeviceId}", id);
+
 			return device;
 		}
 
