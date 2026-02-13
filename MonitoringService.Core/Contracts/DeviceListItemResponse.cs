@@ -13,5 +13,5 @@
 		DateTimeOffset lastSeenAt,
 		string version,
 		int activitiesCount
-		);
+	);
 }

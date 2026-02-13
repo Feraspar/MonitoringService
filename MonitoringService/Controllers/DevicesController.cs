@@ -9,9 +9,9 @@
 	public class DevicesController : ControllerBase
 	{
 		private readonly IDeviceQueryService _deviceService;
-		private readonly ILogger _logger;
+		private readonly ILogger<DevicesController> _logger;
 
-		public DevicesController(IDeviceQueryService deviceService, ILogger logger)
+		public DevicesController(IDeviceQueryService deviceService, ILogger<DevicesController> logger)
 		{
 			_deviceService = deviceService;
 			_logger = logger;

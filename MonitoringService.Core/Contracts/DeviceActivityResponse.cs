@@ -16,5 +16,5 @@
 		DateTimeOffset StartTime,
 		DateTimeOffset EndTime,
 		string Version
-		);
+	);
 }
