@@ -1,5 +1,6 @@
 ﻿namespace MonitoringService.Core.Services
 {
+	using Microsoft.Extensions.Logging;
 	using MonitoringService.Core.Abstractions;
 	using MonitoringService.Core.Contracts;
 	using MonitoringService.Core.Entities;
@@ -29,6 +30,11 @@
 		/// </summary>
 		private readonly IUnitOfWork _unitOfWork;
 
+		/// <summary>
+		/// Логгер для вывода информации.
+		/// </summary>
+		private readonly ILogger _logger;
+
 		#endregion Private Fields
 
 		#region Public Constructors
@@ -39,11 +45,12 @@
 		/// <param name="deviceRepository">Репозиторий устройств.</param>
 		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
 		/// <param name="unitOfWork">Сервис сохранения изменений в БД.</param>
-		public DeviceActivityService(IDeviceRepository deviceRepository, IActivityRepository activityRepository, IUnitOfWork unitOfWork)
+		public DeviceActivityService(IDeviceRepository deviceRepository, IActivityRepository activityRepository, IUnitOfWork unitOfWork, ILogger logger)
 		{
 			_deviceRepository = deviceRepository;
 			_activityRepository = activityRepository;
 			_unitOfWork = unitOfWork;
+			_logger = logger;
 		}
 
 		#endregion Public Constructors
@@ -63,11 +70,13 @@
 		{
 			if (deviceId == Guid.Empty)
 			{
+				_logger.LogWarning("Ingest validation failed: deviceId is empty");
 				throw new ArgumentNullException("deviceId is required", nameof(deviceId));
 			}
 
 			if (endTime < startTime)
 			{
+				_logger.LogWarning("Ingest validation failed: endTime < startTime. deviceId={DeviceId}, startTime={StartTime}, endTime={EndTime}", deviceId, startTime, endTime);
 				throw new ArgumentNullException("endTime must be >= startTime", nameof(endTime));
 			}
 
@@ -80,6 +89,8 @@
 
 			if (device is null)
 			{
+				_logger.LogInformation("Device not found. Creating new device: deviceId={DeviceId}", deviceId);
+
 				device = new Device
 				{
 					Id = deviceId,
@@ -92,6 +103,8 @@
 			}
 			else
 			{
+				_logger.LogDebug("Device found. Updating snapshot fields: deviceId={DeviceId}", deviceId);
+
 				if (incomingName is not null)
 					device.Name = incomingName;
 
@@ -117,6 +130,8 @@
 			await _activityRepository.AddAsync(activity, ct);
 
 			await _unitOfWork.SaveChangesAsync(ct);
+
+			_logger.LogInformation("Ingest saved successfully: deviceId={DeviceId}, activityId={ActivityId}", device.Id, activity.Id);
 
 			return new DeviceActivityResponse(device.Id, activity.Id, activity.DeviceUserName, activity.StartTime, activity.EndTime, activity.Version);
 		}

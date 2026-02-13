@@ -1,5 +1,6 @@
 ﻿namespace MonitoringService.Core.Services
 {
+	using Microsoft.Extensions.Logging;
 	using MonitoringService.Core.Abstractions;
 	using MonitoringService.Core.Contracts;
 	using System;
@@ -25,6 +26,11 @@
 		/// </summary>
 		private readonly IDeviceRepository _deviceRepository;
 
+		/// <summary>
+		/// Логгер для вывода информации.
+		/// </summary>
+		private readonly ILogger _logger;
+
 		#endregion Private Fields
 
 		#region Public Constructors
@@ -34,10 +40,11 @@
 		/// </summary>
 		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
 		/// <param name="deviceRepository">Репозиторий устройств.</param>
-		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository)
+		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository, ILogger logger)
 		{
 			_activityRepository = activityRepository;
 			_deviceRepository = deviceRepository;
+			_logger = logger;
 		}
 
 		#endregion Public Constructors
@@ -53,6 +60,8 @@
 		public async Task<List<DeviceActivityItemResponse>> GetAllActivitiesByIdAsync(Guid deviceId, CancellationToken ct = default)
 		{
 			var activities = await _activityRepository.GetAllByIdAsync(deviceId, ct);
+
+			_logger.LogInformation("Get activities result: deviceId={DeviceId}, count={Count}", deviceId, activities.Count);
 
 			var response = activities.Select(a => new DeviceActivityItemResponse(
 				a.DeviceId,
@@ -73,6 +82,8 @@
 		public async Task<List<DeviceListItemResponse>> GetAllDevicesAsync(CancellationToken ct = default)
 		{
 			var devices = await _deviceRepository.GetAllAsync(ct);
+
+			_logger.LogInformation("Devices loaded from repository: count={Count}", devices.Count);
 
 			var ids = devices.Select(d => d.Id).ToArray();
 			var counts = await _activityRepository.GetCountsByDeviceIdsAsync(ids, ct);
