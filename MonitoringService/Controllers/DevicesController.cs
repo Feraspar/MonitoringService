@@ -39,7 +39,7 @@
 		[HttpGet("{id:guid}/activities")]
 		public async Task<ActionResult<List<DeviceActivityItemResponse>>> GetAllActivitiesById(Guid id, CancellationToken ct)
 		{
-			_logger.LogInformation("GET activities for device: {DeviceId}", id);
+			_logger.LogInformation("GET activities for device={DeviceId}", id);
 
 			try
 			{

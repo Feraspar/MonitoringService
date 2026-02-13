@@ -9,10 +9,12 @@
 	public class DeviceActivityController : ControllerBase
 	{
 		private readonly IDeviceActivityService _deviceActivityService;
+		private readonly ILogger _logger;
 
-		public DeviceActivityController(IDeviceActivityService deviceActivityService)
+		public DeviceActivityController(IDeviceActivityService deviceActivityService, ILogger logger)
 		{
 			_deviceActivityService = deviceActivityService;
+			_logger = logger;
 		}
 
 		[HttpPost]
@@ -20,6 +22,8 @@
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<DeviceActivityResponse>> Ingest([FromBody] DeviceActivityRequest request, CancellationToken ct)
 		{
+			_logger.LogInformation("POST device requested");
+
 			try
 			{
 				var result = await _deviceActivityService.IngestDataAsync(
@@ -38,10 +42,13 @@
 					result.EndTime,
 					result.Version);
 
+				_logger.LogInformation("POST device={DeviceId} successfull", result.DeviceId);
+
 				return Ok(response);
 			}
 			catch (ArgumentException ex)
 			{
+				_logger.LogError(ex, "POST device failed");
 				return BadRequest(new { error = ex.Message });
 			}
 		}
