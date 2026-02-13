@@ -26,7 +26,7 @@
 		/// <summary>
 		/// Логгер для вывода информации.
 		/// </summary>
-		private readonly ILogger _logger;
+		private readonly ILogger<ActivityRepository> _logger;
 
 		#endregion Private Fields
 
@@ -36,7 +36,7 @@
 		/// Конструктор класса.
 		/// </summary>
 		/// <param name="db">Контекст БД.</param>
-		public ActivityRepository(MonitoringServiceDbContext db, ILogger logger)
+		public ActivityRepository(MonitoringServiceDbContext db, ILogger<ActivityRepository> logger)
 		{
 			_db = db;
 			_logger = logger;

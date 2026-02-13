@@ -9,9 +9,9 @@
 	public class DeviceActivityController : ControllerBase
 	{
 		private readonly IDeviceActivityService _deviceActivityService;
-		private readonly ILogger _logger;
+		private readonly ILogger<DeviceActivityController> _logger;
 
-		public DeviceActivityController(IDeviceActivityService deviceActivityService, ILogger logger)
+		public DeviceActivityController(IDeviceActivityService deviceActivityService, ILogger<DeviceActivityController> logger)
 		{
 			_deviceActivityService = deviceActivityService;
 			_logger = logger;

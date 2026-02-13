@@ -29,7 +29,7 @@
 		/// <summary>
 		/// Логгер для вывода информации.
 		/// </summary>
-		private readonly ILogger _logger;
+		private readonly ILogger<DeviceQueryService> _logger;
 
 		#endregion Private Fields
 
@@ -40,7 +40,7 @@
 		/// </summary>
 		/// <param name="activityRepository">Репозитрий активностей устройства.</param>
 		/// <param name="deviceRepository">Репозиторий устройств.</param>
-		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository, ILogger logger)
+		public DeviceQueryService(IActivityRepository activityRepository, IDeviceRepository deviceRepository, ILogger<DeviceQueryService> logger)
 		{
 			_activityRepository = activityRepository;
 			_deviceRepository = deviceRepository;
