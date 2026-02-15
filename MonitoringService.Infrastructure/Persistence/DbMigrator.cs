@@ -5,10 +5,18 @@
 	using System;
 	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Класс для автоматической миграции в БД.
+	/// </summary>
 	public static class DbMigrator
 	{
 		#region Public Methods
 
+		/// <summary>
+		/// Применяет миграции с задержкой между попытками подключения.
+		/// </summary>
+		/// <param name="services">Провайдер сервисов из DI контейнера.</param>
+		/// <param name="ct">Токен для отмены выполняемой операции.</param>
 		public static async Task MigrateAsync(IServiceProvider services, CancellationToken ct = default)
 		{
 			using var scope = services.CreateScope();
