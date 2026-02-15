@@ -48,4 +48,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");
 
+await DbMigrator.MigrateAsync(app.Services);
+
 app.Run();
