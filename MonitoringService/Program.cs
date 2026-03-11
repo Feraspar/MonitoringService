@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MonitoringService.Api.Middleware;
 using MonitoringService.Core.Abstractions;
 using MonitoringService.Core.Services;
 using MonitoringService.Infrastructure.Persistence;
@@ -32,6 +33,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

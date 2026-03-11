@@ -64,7 +64,7 @@
 		/// <returns>Список всех устройств.</returns>
 		public async Task<List<Device>> GetAllAsync(CancellationToken ct = default)
 		{
-			var list = await _db.Devices.OrderByDescending(x => x.LastSeenAt).ToListAsync(ct);
+			var list = await _db.Devices.AsNoTracking().OrderByDescending(x => x.LastSeenAt).ToListAsync(ct);
 
 			_logger.LogDebug("DB query result: devices count={Count}", list.Count);
 

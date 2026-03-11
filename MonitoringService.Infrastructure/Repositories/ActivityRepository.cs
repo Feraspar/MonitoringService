@@ -65,7 +65,7 @@
 		/// <returns>Список активностей устройства.</returns>
 		public async Task<List<DeviceActivity>> GetAllByIdAsync(Guid deviceId, CancellationToken ct = default)
 		{
-			var list = await _db.DeviceActivities.Where(x => x.DeviceId == deviceId).OrderByDescending(x => x.StartTime).ToListAsync(ct);
+			var list = await _db.DeviceActivities.AsNoTracking().Where(x => x.DeviceId == deviceId).OrderByDescending(x => x.StartTime).ToListAsync(ct);
 
 			_logger.LogDebug("DB query result: activities count={Count} for deviceId={DeviceId}", list.Count, deviceId);
 

@@ -12,7 +12,7 @@
 	/// <summary>
 	/// Сервис для получения устройств из БД.
 	/// </summary>
-	public class DeviceQueryService : IDeviceQueryService
+	public sealed class DeviceQueryService : IDeviceQueryService
 	{
 		#region Private Fields
 
