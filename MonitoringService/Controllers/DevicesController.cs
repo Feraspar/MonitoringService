@@ -18,41 +18,31 @@
 		}
 
 		[HttpGet]
+		[ProducesResponseType(typeof(List<DeviceListItemResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<ActionResult<List<DeviceListItemResponse>>> GetAll(CancellationToken ct)
 		{
 			_logger.LogInformation("GET deviceses requested");
 
-			try
-			{
-				var result = await _deviceService.GetAllDevicesAsync(ct);
-				_logger.LogInformation("GET returned {Count} devices", result.Count);
+			var result = await _deviceService.GetAllDevicesAsync(ct);
 
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "GET devices failed");
-				return BadRequest();
-			}
+			_logger.LogInformation("GET returned {Count} devices", result.Count);
+
+			return Ok(result);
 		}
 
 		[HttpGet("{id:guid}/activities")]
+		[ProducesResponseType(typeof(List<DeviceActivityItemResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<ActionResult<List<DeviceActivityItemResponse>>> GetAllActivitiesById(Guid id, CancellationToken ct)
 		{
 			_logger.LogInformation("GET activities for device={DeviceId}", id);
 
-			try
-			{
-				var result = await _deviceService.GetAllActivitiesByIdAsync(id, ct);
-				_logger.LogInformation("GET returned {Count} activities for device {DeviceId}", result.Count, id);
+			var result = await _deviceService.GetAllActivitiesByIdAsync(id, ct);
 
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "GET activities failed");
-				return BadRequest();
-			}
+			_logger.LogInformation("GET returned {Count} activities for device {DeviceId}", result.Count, id);
+
+			return Ok(result);
 		}
 	}
 }
